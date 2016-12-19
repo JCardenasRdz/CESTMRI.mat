@@ -26,14 +26,13 @@ ParamVec= `[T1 T2 Conc ExchangeRates Pool_Offsets]`;
     Pool_Offsets    1 x n vector of pool offsets in ppm (including water)
     Outputs
 
-The CESTnPools function will solve the time-dependent Bloch equations using the parameters defined in the program.
+The `CESTnPools` function will solve the time-dependent Bloch equations using the parameters defined in the program.
 
-zSpectrum   Z-spectra of length K (same as saturation offsets) 
-Mstate      (3n+1) X K matrix of final magnetization components for each pool with the following format: 
+    zSpectrum   Z-spectra of length K (same as saturation offsets) 
+    Mstate      (3n+1) X K matrix of final magnetization components for each pool with the following format: 
+    Mstate=     [Mx,A ... Mx,N My,A ... My,N Mz,A ... Mz,N 1]' x K
 
-Mstate=     [Mx,A ... Mx,N My,A ... My,N Mz,A ... Mz,N 1]' x K
-Notation
-
+## Notation
 Water should always be assigned to pool A. All other pools should be assigned to other letters, from pool B, pool C, all the way to pool N. This notation will be used in the following paragraphs when constructing the five vectors. The T1, T2, and pool saturation vectors are constructed in the following form:
 
 T1=     [T1A T1B T1C ... T1N]; 
