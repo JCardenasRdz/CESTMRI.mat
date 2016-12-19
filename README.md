@@ -2,7 +2,7 @@
 CEST.mat is MATLAB toolbox for simulating and fitting an arbitrary number of exchange pools in CEST MRI and NMR.
 
     [zSpectrum,Mstate]= CESTnPools(magField, satTime, satPower, PPM, ParamVec)    
-## Notation
+### Notation
 Water should always be assigned to pool A. All other pools should be assigned to other letters, from pool B, pool C, all the way to pool N. This notation will be used in the following paragraphs when constructing the five vectors needed to simulate data. The `T1`, `T2`, and pool saturation vectors are constructed in the following form:
 
     T1=     [T1A T1B T1C ... T1N]; 
@@ -15,7 +15,8 @@ Water should always be assigned to pool A. All other pools should be assigned to
     ExchangeRates=  [kBA kCA ... kNA];
 
 These are the exchange rates from one pool to water. Notice that the components of these two vectors begin with pool B, not pool A. Like before, `CB` and `kBA` are associated with pool B, `CC` and `kCA` are associated with pool C, and so on.
-### SIMULATION OF CEST MRI DATA
+
+## SIMULATION OF CEST MRI DATA
 In order to simulate CEST MRI data using the `CESTnPools` function, the following parameters must be defined:
 
 _Single floating point numbers_
@@ -46,15 +47,17 @@ The `CESTnPools` function will solve the time-dependent Bloch equations using th
     Mstate=     [Mx,A ... Mx,N My,A ... My,N Mz,A ... Mz,N 1]' x K
 
 
+## FITTING OF CEST MRI DATA
+In order to fit CEST MRI data using the `CESTnPools` function, some of the variables used in the simulation but me fixed using an anonymous function, otherwise the fitting algorithm will try to estiamte them. The two variables thats are always knows are:
 
-### FITTING OF CEST MRI DATA
-In order to fit CEST MRI data using the CESTnPools function, some known floating-point numbers must be defined. These include the magnetic field in Tesla’s (magField), the saturation time in seconds (satTime), the saturation power in micro-Tesla’s, and the number of pools (nPools).
+       magField = magnetic field in Teslas
+       satTime = saturatin time in seconds
 
-Secondly, some curve fitting parameters must be defined. These include the curve fitting function (CESTfunc), the x-data (xData), the y-data (yData), initial conditions (InitCond), and lower (LowerBounds) and upper bounds (UpperBounds).
+If you are very confident on the saturation power applied to the sample you can also fix `satPower`. If you are want to estimate the actual power, just include it as one of the variables. Once you define the anonymous function, you can use it and `lsqcurvefit` (or other minimizer) to estimate the paramters.
+        _Define anonymous function_
+        
+        CESTfunc= @(ParamVec, SaturationOffset) CESTnPools(magField, satTime, satPower, SaturationOffset, ParamVec);
 
-The curve fitting function is defined by the following, where more details on the variables can be found in the description of simulating CEST MRI data.
-
-CESTfunc= @(ParamVec, SaturationOffset) CESTnPools(magField, satTime, satPower, SaturationOffset, ParamVec);
 The x- and y-data come from imported data. The x-data is the saturation offset vector in parts-per-million and the y-data is the associated Z-spectrum in arbitrary units.
 
 The initial conditions and lower and upper bounds for the CEST parameters follow the same format as the parameter vector (ParamVec) in the CEST simulation section. Initial conditions is the parameter vector for expected results, the lower bounds vector is the parameter vector of lower bounds, and the upper bounds vector is the parameter vector of upper bounds. The more precisely these three vectors are defined, the more accurate the fitting will be.
