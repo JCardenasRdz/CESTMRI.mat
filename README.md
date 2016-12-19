@@ -54,21 +54,22 @@ In order to fit CEST MRI data using the `CESTnPools` function, some of the varia
        satTime = saturatin time in seconds
 
 If you are very confident on the saturation power applied to the sample you can also fix `satPower`. If you are want to estimate the actual power, just include it as one of the variables. Once you define the anonymous function, you can use it and `lsqcurvefit` (or other minimizer) to estimate the paramters.
-        _Define anonymous function_
+
+_Define anonymous function_
         
         CESTfunc= @(ParamVec, SaturationOffset) CESTnPools(magField, satTime, satPower, SaturationOffset, ParamVec);
 
-The x- and y-data come from imported data. The x-data is the saturation offset vector in parts-per-million and the y-data is the associated Z-spectrum in arbitrary units.
+_Perform Non-Linear Leastsquare curve fitting_
 
-The initial conditions and lower and upper bounds for the CEST parameters follow the same format as the parameter vector (ParamVec) in the CEST simulation section. Initial conditions is the parameter vector for expected results, the lower bounds vector is the parameter vector of lower bounds, and the upper bounds vector is the parameter vector of upper bounds. The more precisely these three vectors are defined, the more accurate the fitting will be.
+    [ParamVecPred,resnorm,residual,~,~,~,jacobian]= lsqcurvefit(CESTfunc, InitCond, SaturationOffset, yData, LowerBounds, UpperBounds);
+where:
 
-After all parameters are defined, curve fitting can commence. The lsqcurvefit function is used with the following syntax, where resnorm, residual, and jacobian are defined by MATLAB’s help features:
+    InitCond =              Initial guess for all the parameters to be estimated
+    SaturationOffset=       Experimental saturation offsets in ppm
+    yData=                  Experimental Z spectra
+    LowerBounds=            Lower limit for all the parameters to be estimated
+    UpperBounds=            Upper limit for all the parameters to be estimated
 
-[ParamVecPred,resnorm,residual,~,~,~,jacobian]= lsqcurvefit(CESTfunc, InitCond, xData, yData, LowerBounds, UpperBounds);
-ParamVecPred contains the fitting results in the format of ParamVec. The confidence intervals (conf) are determined using the nlparci function with the following syntax:
+`ParamVecPred` contains the fitting results in the format of ParamVec. The confidence intervals (conf) can be determined using the `nlparci` function with the following syntax:
 
-conf= nlparci(ParamVecPred,residual,'jacobian',jacobian);
-The interpretation of conf is located within MATLAB’s help features. In order to plot the results of the CEST fitting, CESTfunc is used again to determine the predicted fit (yPred) with the following syntax:
-
-yPred= CESTfunc(ParamVecPred, xData);
-Plotting yPred versus xData using the plot function will result in the desired graph for the fitted curve.
+    conf= nlparci(ParamVecPred,residual,'jacobian',jacobian);
