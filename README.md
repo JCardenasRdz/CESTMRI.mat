@@ -1,7 +1,20 @@
 # CESTMRI.mat
 CEST.mat is MATLAB toolbox for simulating and fitting an arbitrary number of exchange pools in CEST MRI and NMR.
 
-    [zSpectrum,Mstate]= CESTnPools(magField, satTime, satPower, PPM, ParamVec)
+    [zSpectrum,Mstate]= CESTnPools(magField, satTime, satPower, PPM, ParamVec)    
+## Notation
+Water should always be assigned to pool A. All other pools should be assigned to other letters, from pool B, pool C, all the way to pool N. This notation will be used in the following paragraphs when constructing the five vectors needed to simulate data. The `T1`, `T2`, and pool saturation vectors are constructed in the following form:
+
+    T1=     [T1A T1B T1C ... T1N]; 
+    T2=     [T2A T2B T2C ... T2N];
+    PPM=    [ppmA ppmB ppmC ... ppmN];
+
+`T1A`, `T2A`, and `ppmA` are all associated with pool A (water); `T1B`, `T2B`, and `ppmB` are all associated with pool B; and so on. The concentrations and exchange rates vectors are constructed in another form:
+
+    Conc=           [CB CC ... CN];
+    ExchangeRates=  [kBA kCA ... kNA];
+
+These are the exchange rates from one pool to water. Notice that the components of these two vectors begin with pool B, not pool A. Like before, `CB` and `kBA` are associated with pool B, `CC` and `kCA` are associated with pool C, and so on.
 ### SIMULATION OF CEST MRI DATA
 In order to simulate CEST MRI data using the `CESTnPools` function, the following parameters must be defined:
 
@@ -32,19 +45,7 @@ The `CESTnPools` function will solve the time-dependent Bloch equations using th
     Mstate      (3n+1) X K matrix of final magnetization components for each pool with the following format: 
     Mstate=     [Mx,A ... Mx,N My,A ... My,N Mz,A ... Mz,N 1]' x K
 
-## Notation
-Water should always be assigned to pool A. All other pools should be assigned to other letters, from pool B, pool C, all the way to pool N. This notation will be used in the following paragraphs when constructing the five vectors needed to simulate data. The `T1`, `T2`, and pool saturation vectors are constructed in the following form:
 
-    T1=     [T1A T1B T1C ... T1N]; 
-    T2=     [T2A T2B T2C ... T2N];
-    PPM=    [ppmA ppmB ppmC ... ppmN];
-
-`T1A`, `T2A`, and `ppmA` are all associated with pool A (water); `T1B`, `T2B`, and `ppmB` are all associated with pool B; and so on. The concentrations and exchange rates vectors are constructed in another form:
-
-    Conc=           [CB CC ... CN];
-    ExchangeRates=  [kBA kCA ... kNA];
-
-These are the exchange rates from one pool to water. Notice that the components of these two vectors begin with pool B, not pool A. Like before, `CB` and `kBA` are associated with pool B, `CC` and `kCA` are associated with pool C, and so on.
 
 ### FITTING OF CEST MRI DATA
 In order to fit CEST MRI data using the CESTnPools function, some known floating-point numbers must be defined. These include the magnetic field in Tesla’s (magField), the saturation time in seconds (satTime), the saturation power in micro-Tesla’s, and the number of pools (nPools).
