@@ -3,7 +3,7 @@
     [zSpectrum,Mstate]= CESTnPools(magField, satTime, satPower, PPM, ParamVec)
 ```
 
-## Notation
+### Notation
 Water should always be assigned to pool A. All other pools should be assigned to other letters, from pool B, pool C, all the way to pool N. This notation will be used in the following paragraphs when constructing the five vectors needed to simulate data. The `T1`, `T2`, and pool saturation vectors are constructed in the following form:
 ```Matlab
     T1=     [T1A T1B T1C ... T1N]; 
