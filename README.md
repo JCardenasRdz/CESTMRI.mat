@@ -1,4 +1,4 @@
-CEST.mat is MATLAB toolbox for simulating and fitting an arbitrary number of exchange pools in CEST MRI and NMR.
+*CEST.mat* is MATLAB toolbox for simulating and fitting an arbitrary number of exchange pools in CEST MRI and NMR.
 ```Matlab
     [zSpectrum,Mstate]= CESTnPools(magField, satTime, satPower, PPM, ParamVec)
 ```
@@ -19,18 +19,18 @@ These are the exchange rates from one pool to water. Notice that the components 
 
 # SIMULATION OF CEST MRI DATA
 In order to simulate CEST MRI data using the `CESTnPools` function, the following parameters must be defined:
-
 _Single floating point numbers_
-
--   magField    The magnetic field in Tesla
--   satTime     The saturation time in seconds
--   satPower    The saturation power in micro-Tesla
-
+```
+magField    The magnetic field in Tesla
+satTime     The saturation time in seconds
+satPower    The saturation power in micro-Tesla
+```
 _Vectors_
-
-- SaturationOffset    1 x K vector of saturation offsets in parts per million (ppm)
-- ParamVec            1 x (5n-2) vector, where n is the number of CEST pools including water
-- The vector is constructed by concatenating the following five vectors:
+```
+SaturationOffset    1 x K vector of saturation offsets in parts per million (ppm)
+ParamVec            1 x (5n-2) vector, where n is the number of CEST pools including water
+```
+The vector is constructed by concatenating the following five vectors:
 ```
 ParamVec= `[T1 T2 Conc ExchangeRates Pool_Offsets]`;
 ```
